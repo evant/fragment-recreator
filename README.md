@@ -53,3 +53,24 @@ supportFragmentManager.registerFragmentLifecycleCallbacks(object :
     }
 }, true)
 ```
+
+### ViewPager2
+
+ViewPager2 controls attaching a fragment's view to it's container itself instead of letting the
+fragment handle this. Therefore you need to let the adapter know that they views may have changed.
+You can either use the provided subclass
+
+```kotlin
+import me.tatarka.fragmentrecreator.viewpager2.FragmentStateAdapter
+
+class MyAdapter(..) : FragmentStateAdapter(..)
+```
+
+or do it manually yourself by notifying in `onConfigurationChanged()`.
+
+```kotlin
+override fun onConfigurationChanged(newConfig: Configuration) {
+    super.onConfigurationChanged(newConfig)
+    adapter.notifyDataSetChanged()
+}
+```

@@ -59,6 +59,10 @@ class MainActivity : AppCompatActivity() {
             override fun getItemCount(): Int = 2
         }
     }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+    }
 }
 
 const val TAG = "FragmentRecreator"
