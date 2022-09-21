@@ -1,5 +1,6 @@
 package me.tatarka.fragmentrecreator.sample
 
+import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
@@ -22,6 +23,8 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentManager.FragmentLifecycleCallbacks
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import me.tatarka.fragmentrecreator.recreateOnConfigurationChange
@@ -35,6 +38,13 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main)
+
+        supportFragmentManager.registerFragmentLifecycleCallbacks(object :
+            FragmentLifecycleCallbacks() {
+            override fun onFragmentAttached(fm: FragmentManager, f: Fragment, context: Context) {
+                f.recreateOnConfigurationChange = true
+            }
+        }, true)
 
         val viewPager: ViewPager2 = findViewById(R.id.pager)
         viewPager.adapter = object : FragmentStateAdapter(this) {
@@ -54,7 +64,9 @@ class MainActivity : AppCompatActivity() {
 const val TAG = "FragmentRecreator"
 
 class LegacyViewFragment : Fragment(R.layout.legacy) {
-    init {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         recreateOnConfigurationChange = true
     }
 
